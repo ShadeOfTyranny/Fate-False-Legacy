@@ -25,6 +25,13 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	
 	//Interval timers
     var dragNDrop = $interval(initializeListeners, 250, 20);
+	
+	//Music functions
+	$scope.toggleMusic = function(){ MusicService.toggleMusic(); };
+	$scope.musicPlaying = function(){ return MusicService.musicPlaying(); };
+	$scope.setTrack = function(n){ MusicService.setTrack($scope.selectedTrack); };
+	$scope.musicTracks = MusicService.getTrackList();
+	$scope.selectedTrack = $scope.musicTracks[0];
     
     //Positioning constants
     const weaponVerticalPos = ["59px", "86px", "113px", "140px", "167px"];
