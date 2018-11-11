@@ -1,6 +1,6 @@
 app.service('DataService', ['$rootScope', function($rootScope) {
     const chapterSheetID = '1N9DLSG7iXAkplVsSj4_u3nPfc-VYPaf-4F-RAr2h9E8';
-    const gaidenSheetID = '1k-AdHWJMDHDqWinboBNtB11ss5A4xihryIAyP5TUhgg';
+    const gaidenSheetID = '1N9DLSG7iXAkplVsSj4_u3nPfc-VYPaf-4F-RAr2h9E8';
     var sheetId = '';
     const updateVal = (100 / 14) + 0.1;
     const boxWidth = 16;
