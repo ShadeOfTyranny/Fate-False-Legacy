@@ -1,4 +1,4 @@
-app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', function ($scope, $location, $interval, DataService) {
+app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', 'MusicService', function ($scope, $location, $interval, DataService, MusicService) {
 	$scope.rows = ["1"];
 	$scope.columns = ["1"];
 	const boxWidth = 16;
@@ -525,4 +525,12 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     	    $interval.cancel(dragNDrop); //cancel $interval timer
     	}
     };
+	
+	
 }]);
+
+function adjustMusicVolume(){
+	var player = document.getElementById("audioPlayer");
+	var slider = document.getElementById("musicVolumeSlider");
+	player.volume = parseInt(slider.value) / 100;
+};
