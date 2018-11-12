@@ -265,6 +265,14 @@ img{
 	right: 510px;
 }
 
+.rangeStyle{
+	position: relative;
+	width: 150px; 
+	height: 30px;
+	bottom: 3px;
+	right: 510px;
+}
+
 .centerText{ text-align: center; }
 .rightText{ text-align: right; }
 .boldText{ font-weight: bold; }
