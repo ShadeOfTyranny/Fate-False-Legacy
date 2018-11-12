@@ -10,7 +10,7 @@ app.service('MusicService', ['$rootScope', function ($rootScope) {
     ];
 
     //Functions
-    this.initalizePlayer = function(){ this.setTrack(musicTracks[0]); };
+    this.initializePlayer = function(){ this.setTrack(musicTracks[0]); };
     this.musicPlaying = function(){ return playMusic; };
     this.getTrackList = function(){ return musicTracks; };
 
