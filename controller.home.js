@@ -92,6 +92,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 		});
 
 		MapDataService.loadMapData(mapType);
+		MusicService.initializePlayer();
 	};
 
 	$scope.launchConvoyDialog = function() { $scope.showConvoy = true; };
