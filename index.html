@@ -25,6 +25,7 @@
     <script src="service.data.js"></script>
     <script src="service.convoydata.js"></script>
     <script src="service.shopdata.js"></script>
+	<script src="service.music.js"></script>
 
     <!--Google API Scripts-->
     <script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
@@ -33,6 +34,7 @@
 <body>
     <!-- Individual HTML files are displayed here when loaded -->
     <div ng-view></div>
+	<audio id="audioPlayer" loop style="visibility: hidden"></audio>
 </body>
 
 </html>
