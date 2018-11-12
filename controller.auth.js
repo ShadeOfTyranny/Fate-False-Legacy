@@ -1,4 +1,4 @@
-app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', function($scope, $location, $interval, DataService) {
+app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', 'MusicService', function($scope, $location, $interval, DataService, MusicService) {
     var id = fetch();
     var sheetId = '';
     $scope.ready = false;
@@ -67,6 +67,7 @@ app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', f
                 authorizeDiv.style.display = 'none';
                 loadingDiv.style.display = 'inline';
                 DataService.loadMapData();
+				MusicService.initializePlayer();
             }
         });
     };
