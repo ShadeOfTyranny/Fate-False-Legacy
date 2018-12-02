@@ -50,8 +50,8 @@ img{
 
 .charDiv{
 	pointer-events: none;
-	height:15px;
-	width:15px;
+	height:32px;
+	width:32px;
 }
 
 .hoverImage:hover{
@@ -65,26 +65,26 @@ img{
 
 .healthBarBack{
 	position: absolute;
-	width: 14px;
+	width: 28px;
 	height: 2px;
-	left: 1px;
-	top: 14px;
+	left: 2px;
+	top: 28px;
 	background-color: dimgray;
 }
 
 .healthBarFront{
 	position: absolute;
 	height: 2px;
-	left: 1px;
-	top: 14px;
+	left: 2px;
+	top: 28px;
 }
 
 .healthBarBorder{
 	position: absolute;
-	width: 13px;
+	width: 27px;
 	height: 1px;
-	left: 1px;
-	top: 14px;
+	left: 2px;
+	top: 28px;
 	border: 1px solid black;
 }
 
@@ -136,8 +136,8 @@ img{
 
 .glowBox{
 	position:absolute;
-	height:16px;
-	width:16px;
+	height:32px;
+	width:32px;
 	display:inline-block;
 }
 
@@ -148,8 +148,8 @@ img{
 	right:0;
 	bottom:0;
 	top:0;
-	height:15px;
-	width:15px;
+	height:31px;
+	width:31px;
 }
 
 .glowBoxBorder0{

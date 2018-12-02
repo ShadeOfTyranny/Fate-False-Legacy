@@ -1,8 +1,8 @@
 app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', 'MusicService', function ($scope, $location, $interval, DataService, MusicService) {
 	$scope.rows = ["1"];
 	$scope.columns = ["1"];
-	const boxWidth = 16;
-	const gridWidth = 0;
+	const boxWidth = 31;
+	const gridWidth = 1;
 	var numDefeat = 0;
 	$scope.showGrid = 2;
 	var refreshListener;
@@ -230,7 +230,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
     $scope.determineCharX = function(index, pos){
 		if(index == 0) numDefeat = 0; 
 		if(pos == "Defeated" || pos == "Not Deployed")
-			return (((numDefeat % 30) * 16) + 16) + "px";
+			return (((numDefeat % 15) * 32) + 32) + "px";
 
     	pos = pos.substring(0,pos.indexOf(","));
     	pos = parseInt(pos);
@@ -242,7 +242,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 	$scope.determineCharY = function(pos){
 		if(pos == "Defeated" || pos == "Not Deployed"){
 			numDefeat +=1;
-			return ((Math.floor((numDefeat-1)/30) * (gridWidth + boxWidth)) + ($scope.rows.length * (gridWidth + boxWidth)) + 16) +"px";
+			return ((Math.floor((numDefeat-1)/15) * (gridWidth + boxWidth)) + ($scope.rows.length * (gridWidth + boxWidth)) + 32) +"px";
 		}
 
 		pos = pos.substring(pos.indexOf(",")+1).trim();
@@ -259,7 +259,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 	};
 
 	$scope.getHPPercent = function(currHp, maxHp){
-		return Math.min((currHp/maxHp)*14, 14) + "px";
+		return Math.min((currHp/maxHp)*28, 28) + "px";
 	};
 
 	$scope.determineHPBackgroundColor = function(currHp, maxHp){
