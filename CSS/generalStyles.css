@@ -216,25 +216,9 @@ img{
 
 .buttonGridStyle{
 	position: relative;
-	width: 130px; 
-	height: 20px;
-	bottom: 15px;
-	right: 190px;
-	
- 	border: 0px;
- 	box-shadow: none;
- 	background-color: #fafafa;
- 	color: #505050;
- 	font-family: "Verdana";
-	font-size:10px;
-	cursor: pointer;
-}
-
-.buttonPlayStyle{
-	position: relative;
-	width: 30px; 
-	height: 30px;
-	bottom: 13px;
+	width: 260px; 
+	height: 40px;
+	bottom: 30px;
 	right: 380px;
 	
  	border: 0px;
@@ -242,17 +226,33 @@ img{
  	background-color: #fafafa;
  	color: #505050;
  	font-family: "Verdana";
-	font-size:10px;
+	font-size:20px;
+	cursor: pointer;
+}
+
+.buttonPlayStyle{
+	position: relative;
+	width: 60px; 
+	height: 60px;
+	bottom: 26px;
+	right: 760px;
+	
+ 	border: 0px;
+ 	box-shadow: none;
+ 	background-color: #fafafa;
+ 	color: #505050;
+ 	font-family: "Verdana";
+	font-size:20px;
 	cursor: pointer;
 }
 
 .musicPickerStyle{
 	position: relative;
-	width: 110px; 
-	height: 30px;
-	bottom: 15px;
-	right: 860px;
-	font-size: 10px;
+	width: 220px; 
+	height: 60px;
+	bottom: 30px;
+	right: 1720px;
+	font-size: 20px;
 	border: 0px;
 	background-color: transparent;
 }
@@ -260,17 +260,17 @@ img{
 .speakerIcon{
 	position: relative;
 	font-family: "Verdana";
-	font-size: 16px;
-	bottom: 13px;
-	right: 510px;
+	font-size: 32px;
+	bottom: 26px;
+	right: 1020px;
 }
 
 .rangeStyle{
 	position: relative;
-	width: 150px; 
-	height: 30px;
-	bottom: 3px;
-	right: 510px;
+	width: 300px; 
+	height: 60px;
+	bottom: 6px;
+	right: 1020px;
 }
 
 .centerText{ text-align: center; }
