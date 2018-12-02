@@ -1,8 +1,8 @@
 app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', 'MusicService', function ($scope, $location, $interval, DataService, MusicService) {
 	$scope.rows = ["1"];
 	$scope.columns = ["1"];
-	const boxWidth = 31;
-	const gridWidth = 1;
+	const boxWidth = 32;
+	const gridWidth = 0;
 	var numDefeat = 0;
 	$scope.showGrid = 2;
 	var refreshListener;
