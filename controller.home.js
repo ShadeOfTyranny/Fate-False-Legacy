@@ -230,7 +230,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
     $scope.determineCharX = function(index, pos){
 		if(index == 0) numDefeat = 0; 
 		if(pos == "Defeated" || pos == "Not Deployed")
-			return (((numDefeat % 15) * 32) + 32) + "px";
+			return (((numDefeat % 30) * 32) + 32) + "px";
 
     	pos = pos.substring(0,pos.indexOf(","));
     	pos = parseInt(pos);
