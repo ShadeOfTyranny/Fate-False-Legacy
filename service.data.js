@@ -197,6 +197,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             }
 
                 updateProgressBar();
+				fetchTerrainIndex();
         });
     };
 	
