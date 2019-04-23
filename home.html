@@ -46,10 +46,6 @@
 				<div class="healthBarFront" ng-style="{width: getHPPercent(char.currHp, char.maxHp), 'background-color': determineHPBackgroundColor(char.currHp, char.maxHp)}"></div>
 				<div class="healthBarBorder"></div>
 			</div>
-			<div class="statusIcon" ng-if="char.statuses.length > 0">
-				<div ng-repeat="i in [0,1,2,3,4]" class="statusBar" ng-style="{'background-color': getStatusBarColor(char.statuses, i)}"></div>
-				<img src="IMG/statusoutline.png" class="absolutePos" style="left: 0px; top: 0px;" />
-			</div>
 			<img ng-src="{{getEnemyNum(char.name)}}" class="enemyNum" />
 			<img ng-if="char.tags.indexOf('Boss')!=-1" class="pairUpIcon" src="IMG/shield_boss.png" />
 			<img ng-if="isPaired(cIndex)" class="pairUpIcon" src="IMG/shield_pairup.png" />
