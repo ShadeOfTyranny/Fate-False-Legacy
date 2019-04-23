@@ -95,8 +95,8 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 		MusicService.initializePlayer();
 	};
 
-	$scope.launchConvoyDialog = function() { $scope.showConvoy = true; };
-	$scope.launchShopDialog = function(){ $scope.showShop = true; };
+	$scope.launchConvoyDialog = function() { $scope.showConvoy = false; };
+	$scope.launchShopDialog = function(){ $scope.showShop = false; };
     
     //*************************\\
     // FUNCTIONS FOR MAP TILE  \\
@@ -139,7 +139,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
     	if(bool == undefined || bool == false){
     		positionCharBox(char);
 			toggleCharRange(char, 1);
-    		$scope[char + "_displayBox"] = true;
+    		$scope[char + "_displayBox"] = false;
     	}else{
 			toggleCharRange(char, -1);
     		$scope[char + "_displayBox"] = false;

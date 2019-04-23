@@ -20,12 +20,12 @@ app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', '
     bar.style.value = '0px';
 
     function displayShopDialog() {
-        $scope.showShop = true;
+        $scope.showShop = false;
         $scope.$apply();
     };
 
     function displayConvoyDialog() {
-        $scope.showConvoy = true;
+        $scope.showConvoy = false;
         $scope.$apply();
     };
 
