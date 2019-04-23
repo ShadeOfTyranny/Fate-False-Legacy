@@ -1,8 +1,7 @@
 app.service('DataService', ['$rootScope', function($rootScope) {
     const chapterSheetID = '1N9DLSG7iXAkplVsSj4_u3nPfc-VYPaf-4F-RAr2h9E8';
-    const gaidenSheetID = '1N9DLSG7iXAkplVsSj4_u3nPfc-VYPaf-4F-RAr2h9E8';
     var sheetId = '';
-    const updateVal = (100 / 14) + 0.1;
+    const updateVal = (100 / 13) + 0.1;
     const boxWidth = 32;
     const gridWidth = 0;
     var progress = 0;
@@ -26,14 +25,12 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     this.FetchSheetID = function(type){
         switch(type){
             case 1 : return chapterSheetID; break;
-            case 2 : return gaidenSheetID; break;
         }
     };
 
     this.SetSheetID = function(type){
         switch(type){
             case 1 : sheetId = chapterSheetID; break;
-            case 2 : sheetId = gaidenSheetID; break;
         }
     };
 
