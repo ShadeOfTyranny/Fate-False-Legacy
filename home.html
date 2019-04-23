@@ -56,4 +56,219 @@
 			<div style="height: 32px; width: 32px; pointer-events: auto;" class="mapCharCentered" ng-click="displayData(cIndex)"></div>
 		</div>
 	</div>
+
+    <!--Character Info Box-->
+	<div id="{{cIndex}}_box" 
+		 ng-repeat="(cIndex,char) in charaData"
+		 class="characterInfo colorBoxBackground"
+		 draggable="true" 
+		 ng-show="checkCharToggle(cIndex)"
+		 ng-style="{'z-index': boxHoverOn(cIndex)}"
+		 ng-mouseenter="boxHoverIn(cIndex)"
+		 ng-mouseleave="boxHoverOut(cIndex)"
+	>
+		<!--Drag bar-->
+		<div class="absolutePos dragBar colorDragBar"></div>
+		<!--Close button-->
+		<div class="infoElement dragBarButton hoverImage" title="Close" style="left:calc(100% - 18px)" ng-click="removeData(cIndex)">
+			<img src="IMG/close.png">
+		</div>
+		<!--Pair-Up button-->
+		<div class="infoElement dragBarButton hoverImage" title="Switch to Paired Unit" style="left:calc(100% - 38px)" ng-if="isPaired(cIndex)" ng-click="findPairUpChar(cIndex)">
+			<img src="IMG/switchpairup.png">
+		</div>
+		<!--Name, Class, Lvl-->
+		<div class="infoElement whiteText charNamePos" ng-mouseenter="nameHoverIn(cIndex)" ng-mouseleave="nameHoverOut(cIndex)" ng-style="{'background-color': determineNametagColor(char.affiliation)}">
+			<div ng-if="char.portrait.length > 0" class="charPortrait" ng-style="{'color': determineNametagColor(char.affiliation), 'background-image': 'url({{char.portrait}})'}"></div>
+			<div style="position: relative; top: 18px; left: 10px;">
+				<div class="boldText">{{char.name}}</div>
+				<div class="indentedClassName">Lvl. {{char.level}} {{char.class.name}}</div>
+			</div>
+		</div>
+		<!--Battle stats-->
+		<div class="infoElement colorSecondaryDark whiteText HPText">
+			<span class="HpStatLabel">HP</span>
+			<span class="currHPText">{{char.currHp}} /</span>
+			<span class="maxHPText">{{char.TrueHp}}</span>
+		</div>
+		<div class="infoElement colorSecondaryLight blackText movExpBox" style="top: 79px;">
+			<span class="indentedStatLabel">Mov</span>
+			<span class="indentedStat2">{{char.TrueMov}}</span>
+		</div>
+		<div class="infoElement colorSecondaryLight movExpBox blackText" style="top: 104px;">
+			<span class="indentedStatLabel">EXP</span>
+			<span class="indentedStat2">{{char.exp}}</span>
+		</div>
+		<div ng-repeat="stat in battleStatsList" class="infoElement colorSecondaryDark whiteText battleStatBox" ng-style="{top: stat[1], left: stat[2]}">
+			<span class="indentedStatLabel">{{stat[0]}}</span>
+			<span class="indentedStat">{{char[stat[0]]}}</span>
+		</div>
+		<!--Stats-->
+		<div ng-repeat="stat in statsList" ng-mouseenter="statHoverIn(cIndex, $index)" ng-mouseleave="statHoverOut(cIndex, $index)" class="infoElement colorSecondaryLight colorSecondaryLightHover statBox" ng-style="{top: stat[2]}">
+			<span class="indentedStatLabel blackText">{{stat[0]}}</span>
+			<span class="indentedStat" ng-style="{color: getStatColor(cIndex, stat[0])}">{{char['True'+stat[0]]}}</span>
+		</div>
+		<!--Inventory-->
+		<div ng-mouseenter="weaponHoverIn(cIndex, -1)" ng-mouseleave="weaponHoverOut(cIndex, -1)" class="infoElement colorItemDarkHover itemsPos colorItemDark" style="top: 5px;">
+			<span class="indentedWeaponIcon" ng-if="validWeapon(char.equippedWeapon.name)"><img ng-src="{{char.equippedWeapon.spriteUrl}}" onError="this.onerror=null;this.src='IMG/type_mystery.png';" /></span>
+			<span class="indentedWeaponName" ng-if="validWeapon(char.equippedWeapon.name)"  ng-class="{'droppableText': char.equippedWeapon.name.indexOf('(D)')!=-1, 'blackText': char.equippedWeapon.name.indexOf('(D)')==-1}">{{formatWeaponName(char.equippedWeapon.name)}}</span>
+		</div>
+		<div ng-mouseenter="weaponHoverIn(cIndex, -2)" ng-mouseleave="weaponHoverOut(cIndex, -2)" class="infoElement colorItemDarkHover itemsPos colorItemDark" style="top: 32px;">
+			<span class="indentedWeaponIcon" ng-if="validWeapon(char.familiar.name)"><img ng-src="{{char.familiar.spriteUrl}}" onError="this.onerror=null;this.src='IMG/type_mystery.png';" /></span>
+			<span class="indentedWeaponName" ng-if="validWeapon(char.familiar.name)"  ng-class="{'droppableText': char.familiar.name.indexOf('(D)')!=-1, 'blackText': char.familiar.name.indexOf('(D)')==-1}">{{formatWeaponName(char.familiar.name)}}</span>
+		</div>
+		<div ng-repeat="item in char.inventory" ng-mouseenter="weaponHoverIn(cIndex, $index)" ng-mouseleave="weaponHoverOut(cIndex, $index)" class="infoElement colorItemLightHover itemsPos colorItemLight" ng-style="{top: fetchWeaponVerticalPos($index)}">
+			<span class="indentedWeaponIcon" ng-if="validWeapon(item.name)"><img ng-src="{{item.spriteUrl}}" ng-class="{'transparentItem': item.equipped == true}" onError="this.onerror=null;this.src='IMG/type_mystery.png';" /></span>
+			<span class="indentedWeaponName" ng-if="validWeapon(item.name)" ng-class="{'lightGrayText': item.equipped == true, 'droppableText': item.name.indexOf('(D)')!=-1, 'blackText': item.name.indexOf('(D)')==-1}">{{formatWeaponName(item.name)}}</span>
+		</div>
+		<!--Skills-->
+		<div ng-repeat="skill in char.skills" class="infoElement blackText colorItemLightHover colorItemLight colorItemLightHover skillPos" ng-mouseover="skillHoverIn(cIndex, $index)" ng-mouseleave="skillHoverOut(cIndex, $index)" ng-style="{top: fetchSklVerticalPos($index)}">
+			<span class="indentedSkillName" ng-if="validSkill(skill.name)">{{skill.name}}</span>
+		</div>
+		<!--Weaknesses-->
+		<div class="infoElement colorSecondaryLight whiteText weaknessBox">
+			<img ng-repeat="w in char.weaknesses" ng-src="{{fetchWeaknessIcon(w)}}" class="weaknessIcon" title="{{w}}" />
+		</div>
+		<!--Weapon ranks-->
+		<div ng-repeat="w in char.weaponRanks"  ng-if="existsWeapon(w.class)" title="{{w.class}} Rank" class="infoElement weaponRankPos" ng-style="{left: fetchWpnRankHorzPos($index)}">
+			<img ng-src="{{weaponIcon(w.class)}}" style="display:inline-block">
+			<div class="weaponRankLtrPos blackText">{{w.rank}}</div>
+			<div class="weaponRankBackground"></div>
+			<div class="weaponRankBar" ng-style="{width: w.exp + 'px'}"></div>
+			<div class="weaponRankBorder"></div>
+		</div>
+		<!--Motif-->
+		<div class="infoElement colorSecondaryDark colorSecondaryDarkHover whiteText motifBox" ng-mouseover="motifHoverIn(cIndex)" ng-mouseleave="motifHoverOut(cIndex)">
+			{{char.motif.name}}
+		</div>
+		<!--Gold-->
+		<div class="infoElement colorSecondaryDark whiteText goldBox">{{char.money}} G</div>
+		<!--Status-->
+		<div class="infoElement colorSecondaryDark colorSecondaryDarkHover whiteText statusBox" ng-mouseover="statusHoverIn(cIndex)" ng-mouseleave="statusHoverOut(cIndex)">
+			{{char.statuses.length}} Status<span ng-if="char.statuses.length != 1">es</span>
+		</div>
+		<!--Terrain-->
+		<div class="infoElement colorSecondaryDark colorSecondaryDarkHover whiteText terrainBox" ng-mouseover="terrainHoverIn(cIndex)" ng-mouseleave="terrainHoverOut(cIndex)">
+			{{terrainLocs[char.position].type.length > 0 ? terrainLocs[char.position].type : "No Terrain"}}
+		</div>
+		<!--Name Info Box-->
+		<div ng-if="nameHoverOn(cIndex)" class="infoElement colorHoverBox whiteText nameInfoPos">
+			<div class="popOutText popOutHeader">
+				<span ng-if="char.desc.length > 0" style="display:inline-block;">{{char.desc}}</span>
+				<span ng-if="char.behavior.length > 0" class="italicText" style="display:inline-block;" ng-style="{'margin-top' : char.desc.length > 0 ? '3px' : '0px'}">{{char.behavior}}</span>
+				<span style="display:inline-block;" ng-style="{'margin-top' : char.desc.length > 0 || char.behavior.length > 0 ? '10px' : '0px'}">
+					<span class="boldText">{{char.class.name}}</span>: {{char.class.desc}}
+				</span>
+			</div>
+		</div>
+		<!--Stat info boxes-->
+		<div ng-repeat="stat in statsList">
+			<div ng-if="statHoverOn(cIndex, $index)" class="infoElement colorHoverBox whiteText statInfoPos" ng-style="{top: stat[2]}">
+				<div class="popOutText popOutHeader">
+					<span>Base: {{char[stat[0]]}}<br /></span>
+					<span ng-if="char.equippedWeapon[stat[0]+'Eqpt'] != 0">{{char.equippedWeapon.name}}: {{char.equippedWeapon[stat[0]+'Eqpt']}}<br /></span>
+					<span ng-if="char[stat[0]+'Buff'] != 0">Buff/Debuff: {{char[stat[0]+'Buff']}}<br /></span>
+					<span ng-if="char[stat[0]+'Boost'] != 0">Boost: {{char[stat[0]+'Boost']}}<br /></span>
+					<span ng-if="char.paired == true && char.hasRescue == false && (stat[0] == 'Skl' || stat[0] == 'Spd')">Rescue: -{{char['Orig'+stat[0]] - char['True'+stat[0]]}}<br /></span>
+				</div>
+			</div>
+		</div>
+		<!--Inventory Desc-->
+		<div class="infoElement colorHoverBox whiteText itemInfoPos" ng-if="weaponHoverOn(cIndex, -1) && validWeapon(char.equippedWeapon.name) && char.equippedWeapon.name != 'Unarmed'" style="top: 5px;">
+			<div class="popOutText itemNamePos boldText">{{formatWeaponName(char.equippedWeapon.name)}}</div>
+			<div class="popOutText itemRankPos">
+				<img style="display: inline-block;" ng-src="{{getItemDamageIcon(char.equippedWeapon.type)}}" />
+				<span ng-if="hasWeaponRank(char.equippedWeapon.rank)">{{char.equippedWeapon.rank}} -</span>
+				{{char.equippedWeapon.class}}
+			</div>
+			<div class="customDivider" style="top:22px"></div>
+			<div ng-if="notItem(char.equippedWeapon.class)">
+				<div class="popOutText itemMightPos">Might: {{char.equippedWeapon.might}}</div>
+					<div class="popOutText itemMightPos" style="right:0px">Hit: {{char.equippedWeapon.hit}}</div>
+					<div class="popOutText itemWeightPos">Crit: {{char.equippedWeapon.crit}}</div>
+					<div class="popOutText itemWeightPos" style="right:0px">Range: {{char.equippedWeapon.range}}</div>
+					<div class="customDivider" style="top:58px"></div>
+			</div>
+			<div class="popOutText" ng-class="{'scroll-up' : textTooLong(char.equippedWeapon.effect, char.equippedWeapon.desc)}" ng-style="{top: setDescriptionLoc(char.equippedWeapon.class), height: setItemDescHeight(char.equippedWeapon.class)}">
+				<p>
+					<span class="italicText">{{char.equippedWeapon.effect}}<br/></span><span>{{char.equippedWeapon.desc}}</span>
+				</p>
+			</div>
+		</div>
+		<div class="infoElement colorHoverBox whiteText itemInfoPos" ng-if="weaponHoverOn(cIndex, -2) && validWeapon(char.familiar.name)" style="top: 20px;">
+			<div class="popOutText itemNamePos boldText">{{formatWeaponName(char.familiar.name)}}</div>
+			<div class="popOutText itemRankPos" ng-if="char.familiar.isCommand">Command</div>
+			<div class="customDivider" style="top:22px"></div>
+			<div class="popOutText" ng-class="{'scroll-up' : textTooLong(char.familiar.effect, char.familiar.desc)}" style="top: 25px; height: 108px;">
+				<p>
+					<span class="italicText">{{char.familiar.effect}}<br/></span><span>{{char.familiar.desc}}</span>
+				</p>
+			</div>
+		</div>
+		<div ng-repeat="weapon in char.inventory">
+			<div class="infoElement colorHoverBox whiteText itemInfoPos" ng-if="weaponHoverOn(cIndex, $index) && validWeapon(weapon.name) && weapon.equipped == false && weapon.isFamiliar == false" ng-style="{top: fetchWpnDescVerticalPos($index)}">
+				<div class="popOutText itemNamePos boldText">{{formatWeaponName(weapon.name)}}</div>
+				<div class="popOutText itemRankPos">
+						<img style="display: inline-block;" ng-src="{{getItemDamageIcon(weapon.type)}}" />
+					<span ng-if="hasWeaponRank(weapon.rank)">{{weapon.rank}} -</span>
+					{{weapon.class}}
+				</div>
+				<div class="customDivider" style="top:22px"></div>
+				<div ng-if="notItem(weapon.class)">
+					<div class="popOutText itemMightPos">Might: {{weapon.might}}</div>
+					<div class="popOutText itemMightPos" style="right:0px">Hit: {{weapon.hit}}</div>
+					<div class="popOutText itemWeightPos">Crit: {{weapon.crit}}</div>
+					<div class="popOutText itemWeightPos" style="right:0px">Range: {{weapon.range}}</div>
+					<div class="customDivider" style="top:58px"></div>
+				</div>
+				<div class="popOutText" ng-class="{'scroll-up' : textTooLong(weapon.effect, weapon.desc)}" ng-style="{top: setDescriptionLoc(weapon.class), height: setItemDescHeight(weapon.class)}">
+					<p style="padding: 0px; margin: 0px;">
+						<span class="italicText">{{weapon.effect}}<br/></span><span>{{weapon.desc}}</span>
+					</p>
+				</div>
+			</div>
+			<div class="infoElement colorHoverBox whiteText itemInfoPos" ng-if="weaponHoverOn(cIndex, $index) && validWeapon(weapon.name) && weapon.equipped == false && weapon.isFamiliar == true" ng-style="{top: fetchWpnDescVerticalPos($index)}">
+				<div class="popOutText itemNamePos boldText">{{formatWeaponName(weapon.name)}}</div>
+				<div class="popOutText itemRankPos" ng-if="weapon.isCommand">Command</div>
+				<div class="customDivider" style="top:22px"></div>
+				<div class="popOutText" ng-class="{'scroll-up' : textTooLong(weapon.effect, weapon.desc)}" style="top: 25px; height: 108px;">
+					<p>
+						<span class="italicText">{{weapon.effect}}<br/></span><span>{{weapon.desc}}</span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<!--Skill Info Boxes-->
+		<div ng-repeat="skill in char.skills">
+			<div ng-if="skillHoverOn(cIndex, $index) && validSkill(skill.name)" class="infoElement colorHoverBox whiteText skillInfoPos" ng-style="{top: fetchSklDescVerticalPos($index)}">
+				<div class="boldText popOutText popOutHeader">{{skill.name}}</div>
+				<div class="customDivider" style="top:20px"></div>
+				<div class="popOutText popOutBody"><span ng-if="skill.isCommand" class="italicText">[Command] </span>{{skill.desc}}</div>
+			</div>
+		</div>
+		<!--Motif Info Box-->
+		<div ng-if="motifHoverOn(cIndex)" class="infoElement colorHoverBox whiteText motifInfoPos">
+			<div class="popOutText popOutHeader">
+				<div class="boldText">{{char.motif.name}}</div>
+				<div class="italicText">Weaknesses: <span ng-repeat="w in char.motif.weaknesses">{{w}}<span ng-if="!$last">, </span></span><span ng-if="char.motif.weaknesses.length == 0">None</span></div>
+				<div style="margin-top: 5px;">{{char.motif.desc}}</div>
+			</div>
+		</div>
+		<!--Status Info Box-->
+		<div ng-if="statusHoverOn(cIndex) && char.statuses.length > 0" class="infoElement colorHoverBox whiteText statusInfoPos">
+			<div class="popOutText popOutHeader">
+				<div ng-repeat="status in char.statuses | orderBy: ['category', 'name']" style="margin-bottom: 5px;">
+					({{status.category}}) <span class="boldText">{{status.name}}</span> [Turns: {{status.duration}}] - {{status.desc}}
+				</div>
+			</div>
+		</div>
+		<!--Terrain Info Box-->
+		<div ng-if="terrainHoverOn(cIndex)" class="infoElement colorHoverBox whiteText terrainInfoPos">
+			<div class="popOutText popOutHeader" ng-if="terrainLocs[char.position].type.length > 0">
+				<div class="boldText">{{terrainLocs[char.position].type}} Tile ({{char.position}})</div>
+				<div class="italicText">{{terrainTypes[terrainLocs[char.position].type].avo}} Avo, {{terrainTypes[terrainLocs[char.position].type].def}} Def, {{terrainTypes[terrainLocs[char.position].type].heal}}% Healing</div>
+				<div style="margin-top: 5px;">{{terrainTypes[terrainLocs[char.position].type].effect}}<br/>{{terrainTypes[terrainLocs[char.position].type].desc}}</div>
+			</div>
+		</div>
+	</div>
 </div>

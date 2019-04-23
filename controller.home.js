@@ -145,7 +145,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 		var atkRangeList = $scope.charaData[char].atkRange;
 		var healRangeList = $scope.charaData[char].healRange;
 		
-		if($scope.terrainLocs[movRangeList[0]].movCount > 0)
+		if($scope.terrainLocs[movRangeList[i]].movCount > 0)
 			var val = 1;
 		else
 			var val = -1;
@@ -221,6 +221,169 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 		else return "red";
 	};
 
+    //***********************\\
+    // POSITION CALCULATIONS \\
+    //***********************\\
+    
+    //Relocate the information box relative to the clicked char
+    function positionCharBox(char){
+    	var sprite = document.getElementById(char);
+    	var box = document.getElementById(char + '_box');
+    	
+		//var x = sprite.style.left;
+		//x = parseInt(x.replace("px", ""));
+		var x = ($scope.columns.length + 1) * (boxWidth + gridWidth);
+
+    	var y = sprite.style.top;
+		y = parseInt(y.replace("px", ""));
+
+		if(y <= 20) y = 20;
+    	
+    	box.style.left = x + 'px';
+    	box.style.top = y + 'px';
+    };
+    
+	$scope.fetchWeaponVerticalPos = function(index){ return weaponVerticalPos[index]; };
+    $scope.fetchWpnRankHorzPos = function(index){ return weaponRankHorzPos[index]; };
+    $scope.fetchWpnDescVerticalPos = function(index){ return weaponDescVerticalPos[index]; };
+    $scope.fetchSklVerticalPos = function(index){ return skillVerticalPos[index]; };
+	$scope.fetchSklDescVerticalPos = function(index){ return skillDescVerticalPos[index]; };
+
+	$scope.textTooLong = function(textA, textB){
+		return (textA.length + textB.length) > 180;
+	};
+
+	$scope.setItemDescHeight = function(type){
+		if(type != "Item" && type != "Consumable" && type != "Mystery") return "70px";
+    	else return "108px";
+	};
+ 
+    //***********************\\
+    // FUNCTIONS FOR STAT    \\
+    // PROCESSING/FORMATTING \\
+	//***********************\\
+	
+    //Returns true if the value in the passed attribute is >= 0
+    $scope.checkRate = function(stat){ return parseInt(stat) >= 0; };
+    
+    $scope.validSkill = function(skill){
+    	return skill != "" && skill != "None";
+    };
+
+	$scope.getPairName = function(pos){
+		if(pos.indexOf("(") == -1) return "None";
+		else return pos.substring(pos.indexOf("(")+1, pos.indexOf(")"));
+    };
+    
+	$scope.getStatColor = function(index, stat){
+		var char = $scope.charaData[index];
+		var base = parseInt(char[stat]) || 0;
+		var enhnc = parseInt(char["True"+stat]);
+
+		if(enhnc > base) return STAT_BUFF_COLOR;
+		else if(enhnc < base) return STAT_DEBUFF_COLOR;
+		else return STAT_DEFAULT_COLOR;
+	};
+
+	$scope.fetchWeaknessIcon = function(weak){
+		return `IMG/WEAK/${weak}.png`;
+	};
+
+    //*************************\\
+    // FUNCTIONS FOR INVENTORY \\
+    // & WEAPONS PROFICIENCY   \\
+    //*************************\\
+    
+    //Checks to see if the weapon name in the passed slot is null
+    //Version for characters
+    $scope.validWeapon = function(weaponName){
+    	if(weaponName != "-" && weaponName != "- (-)" && weaponName != "") return true;
+    	else return false;
+    };
+    
+    //Returns the icon for the class of the weapon at the index
+    //Version for characters
+    $scope.getWeaponClassIcon = function(type, override){
+		if(override.length > 0) return override;
+    	type = type.toLowerCase();
+    	return "IMG/TYPE/type_" + type + ".png";
+    };
+ 
+    $scope.existsWeapon = function(weaponName){
+    	return weaponName != "" && weaponName != "None";
+    };
+    
+    //Returns the weapon rank icon relevant to the passed weapon type
+    $scope.weaponIcon = function(wpnCls){ 
+    	wpnCls = wpnCls.toLowerCase();
+    	return `IMG/RANK/${wpnCls}.png`;
+    };
+    
+    //Calculates the percentage of weapon proficicency for a specific weapon,
+    //then returns the width of the progress bar in pixels
+    $scope.calcWeaponExp = function(exp){
+		exp = parseInt(exp);
+		
+		var toNextLvl;
+		if(exp < 10) toNextLvl = 10;
+		else if(exp < 30){ toNextLvl = 20; exp -= 10; } 
+		else if(exp < 70){ toNextLvl = 40; exp -= 30; }
+		else if(exp < 150){ toNextLvl = 80; exp -= 70; }
+		else if(exp < 300){ toNextLvl = 150; exp -= 150; }
+		else{ toNextLvl = 1; exp = 1; } //max at S rank
+
+		return (exp/toNextLvl) * 32;
+	};
+    
+    //Checks if there is a value in the index
+    $scope.validDebuff = function(value){
+    	return value != "" && value != "0" && value != "-";
+    };
+    
+    $scope.formatWeaponName = function(name){
+    	return name.replace("(D)", "");
+    };
+    
+    $scope.hasWeaponRank = function(rank){
+    	return rank != "" && rank != "-";
+    };
+    
+    $scope.notItem = function(type){
+    	return type != "Consumable" && type != "Item" && type != "Mystery";
+    };
+    
+    $scope.setDescriptionLoc = function(type){
+    	if(type != "Consumable" && type != "Item" && type != "Mystery") return "60px";
+    	else return "25px";
+    };
+
+	$scope.determineNametagColor = function(aff){
+		switch(aff){
+			case "Alistair's Army" : return NAMETAG_BLUE;
+			case "Crown Army" : 
+			case "Bandits" : return NAMETAG_RED;
+			case "Villagers" : return NAMETAG_GREEN2;
+			case "Allies" : return NAMETAG_GREEN;
+			case "Other" : return NAMETAG_PERIWINKLE;
+			default: return "#000000";
+		}
+	};
+
+	$scope.getItemDamageIcon = function(type){
+		if(type.length == 0) return "";
+		else return `IMG/${type}.png`;
+	};
+	
+	$scope.getStatusBarColor = function(statuses, i){
+		if(statuses.length < (i+1)) return STATUS_NONE;
+
+		switch(statuses[i].category.trim()){
+			case "+" : return STATUS_POSITIVE;
+			case "-" : return STATUS_NEGATIVE;
+			default: return STATUS_NEUTRAL;
+		}
+	}
+
     //***************************\\
     // MOUSEOVER/MOUSEOUT EVENTS \\
     //***************************\\
@@ -231,6 +394,88 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 		if($scope[char+"_boxhover"] == true) return ($scope.rows.length + 2) + "";
 		else return ($scope.rows.length + 1) + "";
 	};
+
+	$scope.nameHoverIn = function(char){ $scope[char + "name"] = true; };
+	$scope.nameHoverOut = function(char){ $scope[char + "name"] = false; };
+	$scope.nameHoverOn = function(char){ return $scope[char + "name"] == true; };
+	
+    $scope.weaponHoverIn = function(char, index){ $scope[char + "wpn_" + index] = true; };
+    $scope.weaponHoverOut = function(char, index){ $scope[char + "wpn_" + index] = false; };
+    $scope.weaponHoverOn = function(char, index){ return $scope[char + "wpn_" + index] == true; };
+    
+    $scope.skillHoverIn = function(char, index){ $scope[char + "skl_" + index] = true; };
+    $scope.skillHoverOut = function(char, index){ $scope[char + "skl_" + index] = false; };
+    $scope.skillHoverOn = function(char, index){ return $scope[char + "skl_" + index] == true; };
+    
+    $scope.statHoverIn = function(char, stat){ $scope[char + "hov_" + stat] = true; };
+    $scope.statHoverOut = function(char, stat){ $scope[char + "hov_" + stat] = false; };
+    $scope.statHoverOn = function(char, stat){ return $scope[char + "hov_" + stat] == true; };
+    
+	$scope.statusHoverIn = function(char){ $scope[char + "status"] = true; };
+	$scope.statusHoverOut = function(char){ $scope[char + "status"] = false; };
+	$scope.statusHoverOn = function(char){ return $scope[char + "status"] == true; };
+
+	$scope.terrainHoverIn = function(char){ $scope[char + "tile"] = true; };
+	$scope.terrainHoverOut = function(char){ $scope[char + "tile"] = false; };
+	$scope.terrainHoverOn = function(char){ return $scope[char + "tile"] == true; };
+
+	$scope.motifHoverIn = function(char){ $scope[char + "motif"] = true; };
+	$scope.motifHoverOut = function(char){ $scope[char + "motif"] = false; };
+	$scope.motifHoverOn = function(char){ return $scope[char + "motif"] == true; };
+    
+    //*************************\\
+    // SUPPORT FOR DRAGABILITY \\
+    // OF CHAR INFO BOX        \\
+    //*************************\\
+    var currDrag = "";
+    
+    function dragStart(event){
+    	var style = window.getComputedStyle(event.target, null);
+    	currDrag = event.target.id;
+        event.dataTransfer.setData("text",(parseInt(style.getPropertyValue("left"),10) - event.clientX) + ',' + (parseInt(style.getPropertyValue("top"),10) - event.clientY));
+    };
+    
+    function dragOver(event){
+    	event.preventDefault();
+    	return false;
+    };
+    
+    function dragEnter(event){
+    	event.preventDefault();
+    };
+    
+    function dropDiv(event){
+    	event.preventDefault();
+    	var data = event.dataTransfer.getData("text").split(',');
+
+    	var drag = document.getElementById(currDrag);
+    	drag.style.left = (event.clientX + parseInt(data[0],10)) + 'px';
+    	drag.style.top = (event.clientY + parseInt(data[1],10)) + 'px';
+    	currDrag = "";
+    };
+    
+    function initializeListeners(){;
+    	var test = document.getElementById('char_0_box');
+    	if($scope.charaData != undefined && test != null){
+
+    		var i = 0;
+    		//Set event listeners to be activated when the div is dragged
+    	    for(var char in $scope.charaData){
+    	    	var box = document.getElementById(char + '_box');
+    	    	box.addEventListener('dragstart',dragStart,false);
+    	    	i++;
+    	    }
+    	    
+    	    //Set event listeners
+    	    var drop = document.getElementById('dropArea');
+    	    drop.addEventListener('dragenter',dragEnter,false);
+    	    drop.addEventListener('dragover',dragOver,false);
+    	    drop.addEventListener('drop',dropDiv,false);
+    	    
+    	    $interval.cancel(dragNDrop); //cancel $interval timer
+    	}
+    };
+	
 	
 }]);
 
