@@ -94,9 +94,6 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 		MapDataService.loadMapData(mapType);
 		MusicService.initializePlayer();
 	};
-
-	$scope.launchConvoyDialog = function() { $scope.showConvoy = false; };
-	$scope.launchShopDialog = function(){ $scope.showShop = false; };
     
     //*************************\\
     // FUNCTIONS FOR MAP TILE  \\
@@ -135,31 +132,23 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
     
     //Toggles character/enemy information box
     $scope.displayData = function(char){
-    	var bool = $scope[char + "_displayBox"];
-    	if(bool == undefined || bool == false){
-    		positionCharBox(char);
-			toggleCharRange(char, 1);
-    		$scope[char + "_displayBox"] = false;
-    	}else{
-			toggleCharRange(char, -1);
-    		$scope[char + "_displayBox"] = false;
-    	}
+		toggleCharRange(char);
     };
 
     $scope.removeData = function(char){
-		toggleCharRange(char, -1);
-    	$scope[char + "_displayBox"] = false;
-    };
-    
-    $scope.checkCharToggle = function(char){
-    	return $scope[char + "_displayBox"] == true;
+		toggleCharRange(char);
     };
 
 	//Add/remove character's range highlighted cells
-	function toggleCharRange(char, val){
+	function toggleCharRange(char){
 		var movRangeList = $scope.charaData[char].range;
 		var atkRangeList = $scope.charaData[char].atkRange;
 		var healRangeList = $scope.charaData[char].healRange;
+		
+		if($scope.terrainLocs[movRangeList[i]].movCount > 0)
+			var val = 1;
+		else
+			var val = -1;
 
 		for(var i = 0; i < movRangeList.length; i++)
 			$scope.terrainLocs[movRangeList[i]].movCount += val;
@@ -168,46 +157,6 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 		for(var k = 0; k < healRangeList.length; k++)
 			$scope.terrainLocs[healRangeList[k]].healCount += val;
 	};
-    
-    $scope.isPaired = function(char){
-		return locatePairedUnit($scope.charaData[char]).length > 0;
-    };
-    
-    //Switches char info box to show the stats of the paired unit
-    //Triggered when char info box "Switch to Paired Unit" button is clicked
-     $scope.findPairUpChar = function(char){
-    	var clickedChar = $scope.charaData[char];
-    	var pairedUnit = locatePairedUnit(clickedChar);
-    	
-    	//Toggle visibility
-    	$scope[char + "_displayBox"] = false;
-    	$scope[pairedUnit + "_displayBox"] = true;
-
-    	var currBox = document.getElementById(char + '_box');
-    	var pairBox = document.getElementById(pairedUnit + '_box');
-    
-		pairBox.style.top = currBox.offsetTop + 'px';
-		pairBox.style.left = currBox.offsetLeft + 'px';
-		
-		toggleCharRange(char, -1); //remove original char's data
-		toggleCharRange(pairedUnit, 1); //display new char's data
-    };
-    
-    function locatePairedUnit(char){
-		if($scope.validPosition(char.position)){
-			//Front unit
-			for(var p in $scope.charaData)
-				if($scope.charaData[p].position == char.name)
-					return p;
-			return "";
-		}else{
-			//Back unit
-			for(var p in $scope.charaData)
-				if($scope.charaData[p].name == char.position)
-					return p;
-			return "";
-		}
-    };
     
     //Parses an enemy's name to see if it contains a number at the end.
     //If it does, it returns that number

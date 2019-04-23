@@ -6,10 +6,6 @@ app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', '
     $scope.loadingIcon = pickLoadingIcon();
     var bar = document.getElementById('progress');
 
-    //Hide dialogs at start
-    $scope.showShop = false;
-    $scope.showConvoy = false;
-
     //Set div visibility
     var authorizeDiv = document.getElementById('authorize-div');
     var unavailableDiv = document.getElementById('unavailable-div');
@@ -18,16 +14,6 @@ app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', '
     unavailableDiv.style.display = 'none';
     loadingDiv.style.display = 'none';
     bar.style.value = '0px';
-
-    function displayShopDialog() {
-        $scope.showShop = false;
-        $scope.$apply();
-    };
-
-    function displayConvoyDialog() {
-        $scope.showConvoy = false;
-        $scope.$apply();
-    };
 
     //Continue to check gapi until it's loaded
     function checkAuth() {
@@ -43,13 +29,9 @@ app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', '
             'apiKey': id,
             'discoveryDocs': ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
         }).then(function() {
-            if (type == 3) displayConvoyDialog();
-            else if (type == 4) displayShopDialog();
-            else {
-                sheetId = DataService.FetchSheetID(type);
-                DataService.SetSheetID(type);
-                testWebAppAvailability();
-            }
+			sheetId = DataService.FetchSheetID(type);
+			DataService.SetSheetID(type);
+			testWebAppAvailability();
         });
     };
 
