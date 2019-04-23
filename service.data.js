@@ -11,7 +11,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     var enemies = null;
     var rows = [];
     var cols = [];
-    var map, characterData, classIndex, itemIndex, skillIndex, motifIndex, familiarIndex, coordMapping, terrainIndex, terrainLocs;
+    var map, characterData, classIndex, itemIndex, skillIndex, motifIndex, familiarIndex, statusIndex, coordMapping, terrainIndex, terrainLocs;
 
     this.getCharacters = function() { return characters; };
     this.getMap = function() { return map; };
@@ -200,9 +200,36 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             }
 
                 updateProgressBar();
+                fetchStatusIndex();
         });
     };
-	
+
+    function fetchStatusIndex() {
+        gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: sheetId,
+            majorDimension: "ROWS",
+            range: 'Statuses!A2:D',
+        }).then(function(response) {
+            var statuses = response.result.values;
+            statusIndex = {};
+
+            for (var i = 0; i < statuses.length; i++) {
+                var s = statuses[i];
+                if (s.length == 0 || s[0].length == 0) continue;
+
+                statusIndex[s[0]] = {
+                    'name': s[0],
+                    'category' : s[1] == "Positive" ? "+" : (s[1] == "Negative" ? "-" : " "),
+                    'duration' : parseInt(s[2]) | 0,
+                    'desc' : s[3]
+                }
+            }
+
+                updateProgressBar();
+                fetchTerrainIndex();
+        });
+    };
+
     function fetchTerrainIndex() {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
@@ -284,6 +311,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'inventory' : {},
                 'familiar' : getFamiliar(c[25]),
                 'skills' : {},
+                'statuses' : [],
                 'maxHpBuff' : c[39].length > 0 ? parseInt(c[39]) : 0,
                 'StrBuff' : c[40].length > 0 ? parseInt(c[40]) : 0,
                 'MagBuff' : c[41].length > 0 ? parseInt(c[41]) : 0,
@@ -342,6 +370,11 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 if(currObj.skills["skl" + (k - 25)].name == "Rescuer")
                     currObj.hasRescuer = true;
             }
+
+            //Statuses
+            for(var l = 34; l < 39; l++)
+                if(c[l].length > 0)
+                    currObj.statuses.push(getStatus(c[l]));
 
             //Calculate true stats
             currObj.TrueHp = calculateTrueStat(currObj, "maxHp");
@@ -761,6 +794,27 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             return getDefaultFamiliarObj(name);
         
         var copy = Object.assign({}, familiarIndex[name]);
+        copy.name = originalName;
+        return copy;
+    };
+
+    function getStatus(name){
+        var originalName = name;
+        if (name != undefined && name.length > 0) {
+            if (name.indexOf("(") != -1)
+                name = name.substring(0, name.indexOf("("));
+            name = name.trim();
+        }
+
+        if (name == undefined || name.length == 0 || statusIndex[name] == undefined)
+            return {
+                'name' : name,
+                'category' : "",
+                'duration' : 0,
+                'desc' : "This status could not be located."
+            }
+
+        var copy = Object.assign({}, statusIndex[name]);
         copy.name = originalName;
         return copy;
     };
