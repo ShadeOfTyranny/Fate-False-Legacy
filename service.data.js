@@ -22,16 +22,12 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     this.loadMapData = function() { fetchCharacterData(); };
     this.calculateRanges = function() { getMapDimensions(); };
 
-    this.FetchSheetID = function(type){
-        switch(type){
-            case 1 : return chapterSheetID; break;
-        }
+    this.FetchSheetID = function(){
+        return chapterSheetID;
     };
 
-    this.SetSheetID = function(type){
-        switch(type){
-            case 1 : sheetId = chapterSheetID; break;
-        }
+    this.SetSheetID = function(){
+        sheetId = chapterSheetID; 
     };
 
     //\\//\\//\\//\\//\\//
