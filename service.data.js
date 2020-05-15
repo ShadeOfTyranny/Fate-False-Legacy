@@ -67,8 +67,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
             var currObj = {
                 'name': c[0],
-                'spriteUrl' : c[88],
-				'affiliation' : c[89],
+                'spriteUrl' : c[89],
+				'affiliation' : c[90],
                 'position' : c[7],
                 'currHp' : parseInt(c[8]) | 0,
                 'maxHp' : parseInt(c[9]) | 0
