@@ -174,29 +174,6 @@ img{
 	background-color: white;	
 }
 
-.itemNamePos{
-	font-size: 11px !important;
-	top: 5px;
-}
-
-.itemRankPos{
-	top: 5px;
-	right: 0px;
-	text-align: right;
-}
-
-.itemMightPos{
-	top:25px;
-}
-
-.itemWeightPos{
-	top:40px;
-}
-
-.itemNotesPos{
-	top:95px;
-}
-
 .buttonGridStyle{
 	position: relative;
 	width: 260px; 
@@ -215,8 +192,8 @@ img{
 
 .buttonPlayStyle{
 	position: relative;
-	width: 60px; 
-	height: 60px;
+	width: 50px; 
+	height: 50px;
 	bottom: 26px;
 	right: 760px;
 	
@@ -234,7 +211,7 @@ img{
 	width: 220px; 
 	height: 60px;
 	bottom: 30px;
-	right: 1720px;
+	right: 1690px;
 	font-size: 20px;
 	border: 0px;
 	background-color: transparent;
@@ -254,85 +231,4 @@ img{
 	height: 60px;
 	bottom: 6px;
 	right: 1020px;
-}
-
-.centerText{ text-align: center; }
-.rightText{ text-align: right; }
-.boldText{ font-weight: bold; }
-.italicText{ font-style: italic; }
-.whiteText{ color: white; }
-.blackText{ color: #000000;}
-.lightGrayText{ color: #8cac49; }
-.droppableText{ color: rgb(214, 0, 54);}
-
-.colorBoxBackground{ background-color: #6e9348 ; }
-.colorDragBar{ background-color: #111b05; }
-.colorItemDark{ background-color: #98b951; }
-.colorItemLight{ background-color: #c8e487; }
-.colorSecondaryDark{ background-color: #202d12; }
-.colorSecondaryLight{ background-color: #dac23b; }
-.colorHoverBox{ background-color: rgb(207, 49, 78); opacity: 0.95;}
-
-.colorItemLightHover:hover{
-	background-color: #e3ffa1!important;
-	cursor: pointer !important;
-}
-
-.colorItemDarkHover:hover{
-	background-color: #9acd32 !important;
-	cursor: pointer !important;
-}
-
-.colorSecondaryLightHover:hover{
-	background-color: #fff9b4 !important;
-	cursor: pointer !important;
-}
-
-.colorSecondaryDarkHover:hover{
-	background-color: #384d20 !important;
-	cursor: pointer !important;
-}
-
-.blackBorder{ border: 1px solid black; }
-.grayscale{ filter: grayscale(100%); }
-.transparentItem{ opacity: 0.5; }
-
-.scroll-up {	
-	overflow: hidden;
-	position: relative;
-   }
-   .scroll-up p {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	line-height: 14px;
-	/* Starting position */
-	-moz-transform:translateY(100%);
-	-webkit-transform:translateY(100%);	
-	transform:translateY(100%);
-	/* Apply animation to this element */	
-	-moz-animation: scroll-up 20s linear infinite;
-	-webkit-animation: scroll-up 12s linear infinite;
-	animation: scroll-up 12s linear infinite;
-   }
-   /* Move it (define the animation) */
-   @-moz-keyframes scroll-up {
-	0%   { -moz-transform: translateY(100%); }
-	100% { -moz-transform: translateY(-100%); }
-   }
-   @-webkit-keyframes scroll-up {
-	0%   { -webkit-transform: translateY(100%); }
-	100% { -webkit-transform: translateY(-100%); }
-   }
-   @keyframes scroll-up {
-	0%   { 
-	-moz-transform: translateY(100%); /* Browser bug fix */
-	-webkit-transform: translateY(100%); /* Browser bug fix */
-	transform: translateY(100%); 		
-	}
-	100% { 
-	-moz-transform: translateY(-100%); /* Browser bug fix */
-	-webkit-transform: translateY(-100%); /* Browser bug fix */
-	transform: translateY(-100%); 
-	}
 }

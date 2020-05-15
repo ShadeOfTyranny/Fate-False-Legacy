@@ -23,7 +23,7 @@
 	<div ng-repeat="(yIndex,row) in rows" class="glowBoxIndent absolutePos" ng-style="{top: determineGlowY(yIndex)}">
 		<div class="glowBox"
 			 ng-repeat="(indexX,column) in columns"
-			 title="({{column}},{{row}}) {{terrainLocs[column+','+row].type}}: {{terrainTypes[terrainLocs[column+','+row].type].avo}}🚶  {{terrainTypes[terrainLocs[column+','+row].type].def}}⛨  {{terrainTypes[terrainLocs[column+','+row].type].heal + terrainLocs[column+','+row].bonusHealVal}}♥"
+			 title="({{column}},{{row}}) {{terrainLocs[column+','+row].type}}"
 			 ng-style="{left: determineGlowX(indexX)}"
 		>
 			 <div style="width: 100%; height: 100%;" ng-style="{'background-color': determineGlowColor(column+','+row)}"></div>
@@ -36,19 +36,17 @@
 		<div id="{{cIndex}}" 
 			 ng-if="validPosition(char.position)"
 			 class="absolutePos charDiv hoverImage"
-			 title="({{char.position}}) {{terrainLocs[char.position].type}}: {{terrainTypes[terrainLocs[char.position].type].avo}}🚶  {{terrainTypes[terrainLocs[char.position].type].def}}⛨  {{terrainTypes[terrainLocs[char.position].type].heal + terrainLocs[char.position].bonusHealVal}}♥"
+			 title="({{char.position}}) {{terrainLocs[char.position].type}}"
 			 ng-style="{left: determineCharX($index, char.position), top: determineCharY(char.position), 'z-index': determineCharZ(char.position)}"
 		>
 			<!--Unit sprite-->
-			<img ng-src="{{char.spriteUrl}}" class="mapCharCentered" ng-class="{grayscale: char.hasMoved}" />
+			<img ng-src="{{char.spriteUrl}}" class="mapCharCentered" />
 			<div ng-if="char.position.indexOf(',') != -1">
 				<div class="healthBarBack"></div>
 				<div class="healthBarFront" ng-style="{width: getHPPercent(char.currHp, char.maxHp), 'background-color': determineHPBackgroundColor(char.currHp, char.maxHp)}"></div>
 				<div class="healthBarBorder"></div>
 			</div>
 			<img ng-src="{{getEnemyNum(char.name)}}" class="enemyNum" />
-			<img ng-if="char.tags.indexOf('Boss')!=-1" class="pairUpIcon" src="IMG/shield_boss.png" />
-			<img ng-if="isPaired(cIndex)" class="pairUpIcon" src="IMG/shield_pairup.png" />
 			<div style="height: 32px; width: 32px; pointer-events: auto;" class="mapCharCentered" ng-click="displayData(cIndex)"></div>
 		</div>
 	</div>

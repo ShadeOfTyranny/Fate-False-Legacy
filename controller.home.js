@@ -6,22 +6,6 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 	var numDefeat = 0;
 	$scope.showGrid = 2;
 	var refreshListener;
-	var supportBonuses;
-
-	$scope.battleStatsList = [
-	                ["Atk", "130px", "5px"],
-	                ["Hit", "130px", "95px"],
-	                ["Crit", "157px", "5px"],
-	                ["Avo", "157px", "95px"]
-	               ];
-	$scope.statsList = [
-	                ["Str", "Strength. Affects damage the unit deals with physical attacks.",    "5px"],
-	                ["Mag", "Magic. Affects damage the unit deals with magical attacks.",        "35px"],
-	                ["Skl", "Skill. Affects hit rate and the frequency of critical hits.",       "65px"],
-	                ["Spd", "Speed. Affects Avo. Unit strikes twice if 5 higher than opponent.", "95px"],
-	                ["Def", "Defense. Reduces damage from physical attacks.",                    "125px"],
-	                ["Res", "Resistance. Reduces damage from physical attacks.",                 "155px"]
-	               ];
 	
 	//Interval timers
     var dragNDrop = $interval(initializeListeners, 250, 20);
@@ -33,29 +17,6 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 	$scope.musicTracks = MusicService.getTrackList();
 	$scope.selectedTrack = $scope.musicTracks[0];
     
-    //Positioning constants
-    const weaponVerticalPos = ["59px", "86px", "113px", "140px", "167px"];
-	const weaponRankHorzPos = ["130px", "185px"];
-    const weaponDescVerticalPos = ["35px", "50px", "65px", "80px", "95px"];
-    const skillVerticalPos = ["5px", "32px", "59px", "86px", "113px", "140px", "167px"];
-    const skillDescVerticalPos = ["5px", "20px", "35px", "50px", "65px", "80px", "95px"];
-    
-    //Constants
-    const STAT_DEFAULT_COLOR = "#000000";
-    const STAT_BUFF_COLOR = "#353cff";
-	const STAT_DEBUFF_COLOR = "#ff0000";
-	
-	const NAMETAG_BLUE = "#255bb2";
-	const NAMETAG_RED = "#c00c13";
-	const NAMETAG_GREEN = "#33bb33";
-	const NAMETAG_GREEN2 = "#9ef237";
-	const NAMETAG_PERIWINKLE = "#9988dd";
-
-	const STATUS_POSITIVE = "#0084ff";
-	const STATUS_NEGATIVE = "#ff0000";
-	const STATUS_NEUTRAL = "#9aeaa5";
-	const STATUS_NONE = "#ffffff";
-    
     //Reroutes the user if they haven't logged into the app
     //Loads data from the DataService if they have
 	if(DataService.getCharacters() == null)
@@ -65,7 +26,6 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 		$scope.mapUrl = DataService.getMap();
 		$scope.rows = DataService.getRows();
 		$scope.columns = DataService.getColumns();
-		$scope.terrainTypes = DataService.getTerrainTypes();
 		$scope.terrainLocs = DataService.getTerrainMappings();
 	}
 
@@ -85,7 +45,6 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 				$scope.mapUrl = DataService.getMap();
 				$scope.rows = DataService.getRows();
 				$scope.columns = DataService.getColumns();
-				$scope.terrainTypes = DataService.getTerrainTypes();
 				$scope.terrainLocs = DataService.getTerrainMappings();
 				$scope.$apply();
 			}
@@ -130,35 +89,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
     // CHARACTERS/SPRITES      \\
     //*************************\\
     
-    //Toggles character/enemy information box
-    $scope.displayData = function(char){
-		toggleCharRange(char);
-    };
-
-    $scope.removeData = function(char){
-		toggleCharRange(char);
-    };
-
-	//Add/remove character's range highlighted cells
-	function toggleCharRange(char){
-		var movRangeList = $scope.charaData[char].range;
-		var atkRangeList = $scope.charaData[char].atkRange;
-		var healRangeList = $scope.charaData[char].healRange;
-		
-		if($scope.terrainLocs[movRangeList[0]].movCount > 0)
-			var val = 1;
-		else
-			var val = -1;
-
-		for(var i = 0; i < movRangeList.length; i++)
-			$scope.terrainLocs[movRangeList[i]].movCount += val;
-		for(var j = 0; j < atkRangeList.length; j++)
-			$scope.terrainLocs[atkRangeList[j]].atkCount += val;
-		for(var k = 0; k < healRangeList.length; k++)
-			$scope.terrainLocs[healRangeList[k]].healCount += val;
-	};
-    
-    //Parses an enemy's name to see if it contains a number at the end.
+   //Parses an enemy's name to see if it contains a number at the end.
     //If it does, it returns that number
     $scope.getEnemyNum = function(name){
     	if(name.lastIndexOf(" ") == -1 || name == undefined)
@@ -231,6 +162,28 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', '
 		if($scope[char+"_boxhover"] == true) return ($scope.rows.length + 2) + "";
 		else return ($scope.rows.length + 1) + "";
 	};
+	
+	function initializeListeners(){;
+    	var test = document.getElementById('char_0_box');
+    	if($scope.charaData != undefined && test != null){
+
+    		var i = 0;
+    		//Set event listeners to be activated when the div is dragged
+    	    for(var char in $scope.charaData){
+    	    	var box = document.getElementById(char + '_box');
+    	    	box.addEventListener('dragstart',dragStart,false);
+    	    	i++;
+    	    }
+    	    
+    	    //Set event listeners
+    	    var drop = document.getElementById('dropArea');
+    	    drop.addEventListener('dragenter',dragEnter,false);
+    	    drop.addEventListener('dragover',dragOver,false);
+    	    drop.addEventListener('drop',dropDiv,false);
+    	    
+    	    $interval.cancel(dragNDrop); //cancel $interval timer
+    	}
+    };
 	
 }]);
 
