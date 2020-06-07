@@ -5,9 +5,8 @@ app.service('MusicService', ['$rootScope', function ($rootScope) {
     var volume = 100;
     const audio = document.getElementById("audioPlayer");
     const musicTracks = [
-        {'name' : "Let's Go", 'src' : "vs Four.mp3", 'speed' : 1.0},
-		{'name' : "~Archer of Betrayal~", 'src' : "Lu Bu's Theme.mp3", 'speed' : 1.0},
-		{'name' : "~Oath Under Snow~", 'src' : "Emiya's Theme.mp3", 'speed' : 1.0},
+		{'name' : "Archer of Betrayal", 'src' : "Lu Bu's Theme - WO4.mp3", 'speed' : 1.0},
+		{'name' : "Berserker of Judges", 'src' : "Steady Mountain - Gammoth.mp3", 'speed' : 1.0},
     ];
 
     //Functions
