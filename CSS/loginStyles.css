@@ -24,8 +24,8 @@
 
 .authText{
 	position: relative;
-	width:542px;
-	height:216px;
+	width:400px;
+	height:100px;
 	left: calc(50% - 425px);
 	top: calc(50% - 128px);
 	text-align: center;
