@@ -27,7 +27,7 @@
 	width:542px;
 	height:216px;
 	left: calc(50% - 280px);
-	top: calc(50% - 300px);
+	top: calc(50% - 240px);
 	text-align: center;
 }
 
@@ -54,9 +54,10 @@
 }
 
 .authButton{
-	position: absolute;
+	position: inherit;
 	width: 200px;
 	height: 35px;
+	margin-top: 95px;
  	border-radius: 10px;
  	border: 0px;
  	box-shadow: none;
